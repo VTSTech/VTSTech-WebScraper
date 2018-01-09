@@ -1,7 +1,7 @@
-<img src="https://i.gyazo.com/127a776a798391d10a630f04b2a04f2f.png">
+<img src="https://i.gyazo.com/04f2f9cf659522e2e077661a9f7fc8b2.png">
 
 
-VTSTech-WebScraper v0.0.1-r00
+VTSTech-WebScraper v0.0.1-r01
 
 
 Simple HTML/PHP Parser written in VB6. Uses wget to download html/php
@@ -13,6 +13,13 @@ capture-len-f will output this many chars forward
 capture-len-r will output this many chars backward
 
 Changelog:
+
+
+v0.0.1-r01 1/8/2018 11:19:08PM
+
+Added 'Reset' button to clear all fields.
+
+Now exits with fatal error if wget.exe not present.
 
 
 v0.0.1-r00 1/8/2018 6:55:48PM

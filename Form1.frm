@@ -1,14 +1,42 @@
 VERSION 5.00
+Object = "{3050F1C5-98B5-11CF-BB82-00AA00BDCE0B}#4.0#0"; "mshtml.dll"
 Begin VB.Form Form1 
    Caption         =   "VTSTech-WebScraper v0.0.1-r00"
-   ClientHeight    =   3600
+   ClientHeight    =   4590
    ClientLeft      =   120
    ClientTop       =   450
-   ClientWidth     =   6405
+   ClientWidth     =   7155
    LinkTopic       =   "Form1"
-   ScaleHeight     =   3600
-   ScaleWidth      =   6405
+   ScaleHeight     =   4590
+   ScaleWidth      =   7155
    StartUpPosition =   3  'Windows Default
+   Begin VB.CommandButton Command2 
+      Caption         =   "reset"
+      BeginProperty Font 
+         Name            =   "Arial"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   255
+      Left            =   5880
+      TabIndex        =   12
+      Top             =   480
+      Width           =   1095
+   End
+   Begin MSHTMLCtl.Scriptlet Scriptlet1 
+      CausesValidation=   0   'False
+      Height          =   1140
+      Left            =   75
+      TabIndex        =   11
+      Top             =   3600
+      Width           =   7380
+      Scrollbar       =   0   'False
+      URL             =   "http://ad.a-ads.com/707814?size=468x60"
+   End
    Begin VB.TextBox Text5 
       BeginProperty Font 
          Name            =   "Arial Narrow"
@@ -75,7 +103,7 @@ Begin VB.Form Form1
       TabIndex        =   3
       Text            =   "http://www.example.com/target/file.html"
       Top             =   120
-      Width           =   4935
+      Width           =   5655
    End
    Begin VB.CommandButton Command1 
       Caption         =   "scrape"
@@ -89,7 +117,7 @@ Begin VB.Form Form1
          Strikethrough   =   0   'False
       EndProperty
       Height          =   255
-      Left            =   5280
+      Left            =   5880
       TabIndex        =   1
       Top             =   120
       Width           =   1095
@@ -111,7 +139,7 @@ Begin VB.Form Form1
       TabIndex        =   0
       Text            =   "Form1.frx":0000
       Top             =   840
-      Width           =   6255
+      Width           =   6975
    End
    Begin VB.Label Label5 
       AutoSize        =   -1  'True
@@ -164,7 +192,7 @@ Begin VB.Form Form1
          Strikethrough   =   0   'False
       EndProperty
       Height          =   210
-      Left            =   1447
+      Left            =   1815
       TabIndex        =   8
       Top             =   3120
       Width           =   3510
@@ -182,7 +210,7 @@ Begin VB.Form Form1
          Strikethrough   =   0   'False
       EndProperty
       Height          =   210
-      Left            =   1687
+      Left            =   2055
       TabIndex        =   7
       Top             =   3360
       Width           =   3030
@@ -216,7 +244,6 @@ Private Declare Sub Sleep Lib "kernel32" (ByVal dwMilliseconds As Long)
 
 Function DoScrape(link)
 Label1.Caption = "Downloading..."
-Set FSO = CreateObject("Scripting.FileSystemObject")
 If FSO.FileExists(VB.App.Path & "\wget.exe") Then
 tmp = "--user-agent=" & ua & " --no-check-certificate " & link
 Shell ("cmd.exe /c " & VB.App.Path & "\wget.exe " & tmp & " --output-document=" & VB.App.Path & "\temp.html"), vbHide
@@ -270,12 +297,27 @@ If Len(link) > 1 Then
 End If 'link len > 1
 End Sub
 
+Private Sub Command2_Click()
+Text1.Text = ""
+Text2.Text = ""
+Text3.Text = ""
+Text4.Text = ""
+Text5.Text = ""
+End Sub
+
 Private Sub Form_Load()
-Build = "0.0.1-r00"
+Scriptlet1.Width = 7025
+Scriptlet1.Height = 905
+Set FSO = CreateObject("Scripting.FileSystemObject")
+Build = "0.0.1-r01"
 ua = Chr(34) & "Mozilla/5.0 (Windows NT 5.1; WOW64; rv:52.0) Gecko/20100101 Firefox/52.0" & Chr(34)
 Form1.Caption = "VTSTech-WebScraper v" & Build
 Label1.Caption = "Status: Idle"
 Text1.Text = "target is search string" & vbCrLf & "capture-len-f will output this many chars forward" & vbCrLf & "capture-len-r will output this many chars backward"
+If FSO.FileExists(VB.App.Path & "\wget.exe") = False Then
+    MsgBox "Fatal Error: wget.exe not found! Download and Install again!"
+    Unload Form1
+End If
 End Sub
 
 Private Sub Label2_Click()
