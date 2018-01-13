@@ -1,13 +1,13 @@
 VERSION 5.00
-Object = "{3050F1C5-98B5-11CF-BB82-00AA00BDCE0B}#4.0#0"; "mshtml.dll"
+Object = "{3050F1C5-98B5-11CF-BB82-00AA00BDCE0B}#4.0#0"; "mshtml.tlb"
 Begin VB.Form Form1 
    Caption         =   "VTSTech-WebScraper v0.0.1-r00"
-   ClientHeight    =   4590
+   ClientHeight    =   5130
    ClientLeft      =   120
    ClientTop       =   450
    ClientWidth     =   7155
    LinkTopic       =   "Form1"
-   ScaleHeight     =   4590
+   ScaleHeight     =   5130
    ScaleWidth      =   7155
    StartUpPosition =   3  'Windows Default
    Begin VB.CommandButton Command2 
@@ -30,9 +30,9 @@ Begin VB.Form Form1
    Begin MSHTMLCtl.Scriptlet Scriptlet1 
       CausesValidation=   0   'False
       Height          =   1140
-      Left            =   75
+      Left            =   120
       TabIndex        =   11
-      Top             =   3600
+      Top             =   4200
       Width           =   7380
       Scrollbar       =   0   'False
       URL             =   "http://ad.a-ads.com/707814?size=468x60"
@@ -132,7 +132,7 @@ Begin VB.Form Form1
          Italic          =   0   'False
          Strikethrough   =   0   'False
       EndProperty
-      Height          =   2175
+      Height          =   2895
       Left            =   75
       MultiLine       =   -1  'True
       ScrollBars      =   2  'Vertical
@@ -155,9 +155,9 @@ Begin VB.Form Form1
       EndProperty
       ForeColor       =   &H00FF0000&
       Height          =   210
-      Left            =   120
+      Left            =   45
       TabIndex        =   10
-      Top             =   3120
+      Top             =   3720
       Width           =   480
    End
    Begin VB.Label Label4 
@@ -174,9 +174,9 @@ Begin VB.Form Form1
       EndProperty
       ForeColor       =   &H00FF0000&
       Height          =   210
-      Left            =   120
+      Left            =   45
       TabIndex        =   9
-      Top             =   3360
+      Top             =   3960
       Width           =   1380
    End
    Begin VB.Label Label3 
@@ -192,9 +192,9 @@ Begin VB.Form Form1
          Strikethrough   =   0   'False
       EndProperty
       Height          =   210
-      Left            =   1815
+      Left            =   1822
       TabIndex        =   8
-      Top             =   3120
+      Top             =   3720
       Width           =   3510
    End
    Begin VB.Label Label2 
@@ -210,9 +210,9 @@ Begin VB.Form Form1
          Strikethrough   =   0   'False
       EndProperty
       Height          =   210
-      Left            =   2055
+      Left            =   2062
       TabIndex        =   7
-      Top             =   3360
+      Top             =   3960
       Width           =   3030
    End
    Begin VB.Label Label1 
@@ -241,7 +241,12 @@ Attribute VB_Exposed = False
 Dim Build, x, y, z, tmp, target, link, output
 Dim remotehost, httpdata, httpreq, ua, FSO, forward, backward
 Private Declare Sub Sleep Lib "kernel32" (ByVal dwMilliseconds As Long)
-
+Function FileToString(strFilename As String) As String
+  iFile = FreeFile
+  Open strFilename For Input As #iFile
+    FileToString = StrConv(InputB(LOF(iFile), iFile), vbUnicode)
+  Close #iFile
+End Function
 Function DoScrape(link)
 Label1.Caption = "Downloading..."
 If FSO.FileExists(VB.App.Path & "\wget.exe") Then
@@ -261,22 +266,26 @@ z = 0
 If FSO.FileExists(VB.App.Path & "\temp.html") Then
     Label1.Caption = "Checking for Target ..."
     Sleep (1000)
-    Open VB.App.Path & "\temp.html" For Input As #1
-        Do
-            Line Input #1, tmp
-            y = Len(tmp)
+    'FileToString (VB.App.Path & "\temp.html")
+'    Open VB.App.Path & "\temp.html" For Input As #1
+'        Do
+'            Input #1, tmp
+'            y = Len(tmp)
+            tmp = FileToString(VB.App.Path & "\temp.html")
             For x = 1 To Len(tmp)
+            z = z + 1
                 If Mid$(tmp, x, Len(target)) = target Then
-                    z = z + 1
                     Label1.Caption = "Target Found! Displaying results..."
                     'MsgBox "Found! At " & x
-                    Text1.Text = Text1.Text & vbCrLf & "---" & vbCrLf & Mid(tmp, x, forward)
-                    If (x - backward) > 0 Then Text1.Text = Text1.Text & vbrcrlf & Mid(tmp, x - backward, backward)
+                    Text1.Text = Text1.Text & vbCrLf & "---" & vbCrLf & Mid(tmp, x, forward) & vbCrLf
+                    If (x - backward) > 0 Then
+                        Text1.Text = Text1.Text & vbrcrlf & Mid(tmp, x - backward, backward)
+                    End If
                 End If
             Next x
-    Loop While Not EOF(1)
-    Close #1
-    Sleep (1000)
+'    Loop While Not EOF(1)
+'    Close #1
+'    Sleep (1000)
 End If
 a = DoCleanup()
 End Function
@@ -309,7 +318,7 @@ Private Sub Form_Load()
 Scriptlet1.Width = 7025
 Scriptlet1.Height = 905
 Set FSO = CreateObject("Scripting.FileSystemObject")
-Build = "0.0.1-r01"
+Build = "0.0.1-r02"
 ua = Chr(34) & "Mozilla/5.0 (Windows NT 5.1; WOW64; rv:52.0) Gecko/20100101 Firefox/52.0" & Chr(34)
 Form1.Caption = "VTSTech-WebScraper v" & Build
 Label1.Caption = "Status: Idle"
